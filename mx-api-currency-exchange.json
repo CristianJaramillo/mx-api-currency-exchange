@@ -1,0 +1,988 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Currency Exchange",
+    "description": "Currency Exchange es un servicio de mostrador (Over-The-Counter) donde se realiza el intercambio de divisas. Cada transacción puede usar tipos de cambio preferenciales y puede incluir comisiones por transacción. En algunos casos, los cheques de viajero pueden manejarse como una pseudo-divisa dentro de esta capacidad.",
+    "contact": {
+      "email": "cristian_gerar@hotmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.bank.mx/customerServices/currencyExchange"
+    },
+    {
+      "url": "https://dev.bank.mx/customerServices/currencyExchange"
+    }
+  ],
+  "paths": {
+    "/v1/transaction/control": {
+      "put": {
+        "tags": [
+          "CurrencyExchange"
+        ],
+        "summary": "Cambia el estado de una transacción para indicar su cancelación. Esta operación es útil cuando el cliente decide no continuar con el intercambio o si se detectan condiciones que impiden su procesamiento. Garantiza que la transacción no avance a etapas de ejecución ni afecte los saldos operativos.",
+        "operationId": "ControleTransactionV1",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ControlCurrencyExchangeTransactionRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ControlCurrencyExchangeTransactionResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/transaction/execute": {
+      "put": {
+        "tags": [
+          "CurrencyExchange"
+        ],
+        "summary": "Ejecuta la acción automatizada asociada a una transacción de cambio de divisas que ya ha sido previamente iniciada y, en su caso, validada o autorizada. Esta operación representa la ejecución efectiva del intercambio de divisas, aplicando el tipo de cambio acordado y registrando la salida de fondos y entrega del monto convertido.",
+        "operationId": "ExecuteTransactionV1",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ExecuteCurrencyExchangeTransactionRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ExecuteCurrencyExchangeTransactionResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/transaction/initiate": {
+      "post": {
+        "tags": [
+          "CurrencyExchange"
+        ],
+        "summary": "Crea una nueva solicitud de cambio de divisa para un cliente. Esta operación permite definir la moneda de origen, moneda destino, monto, tipo de cambio aplicado, comisiones y método de pago. La transacción puede estar sujeta a reglas de negocio como validación de inventario de efectivo o aplicación de tasas preferenciales.",
+        "operationId": "InitiateTransactionV1",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/InitiateCurrencyExchangeTransactionRequest"
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/InitiateCurrencyExchangeTransactionResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/transaction/{transactionId}/retrieve": {
+      "get": {
+        "tags": [
+          "CurrencyExchange"
+        ],
+        "summary": "Obtiene toda la información relacionada a una transacción previamente registrada: monedas involucradas, tipo de cambio utilizado, estatus, fecha y hora, identificadores del cliente y del canal, así como cualquier comisión o tasa especial aplicada. Es útil para verificar el resultado de una operación o presentar un recibo al cliente.",
+        "operationId": "RetrieveTransactionV1",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/transactionId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/RetrieveCurrencyExchangeTransactionResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v1/transaction/update": {
+      "put": {
+        "tags": [
+          "CurrencyExchange"
+        ],
+        "summary": "Permite ajustar información de una transacción de cambio de divisas si aún está en estado pendiente o en proceso. Se pueden modificar valores como el monto, el tipo de cambio propuesto, los datos del cliente o el canal de atención. Este endpoint puede validar si la transacción es modificable antes de permitir la operación.",
+        "operationId": "UpdateTransactionV1",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateCurrencyExchangeTransactionRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UpdateCurrencyExchangeTransactionResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "examples": {
+      "RetrieveCurrencyExchangeTransactionResponse": {
+        "value": {
+          "id": "94c0c588-c547-4ae5-b1c0-dba6c53d407d",
+          "status": "INITIATED",
+          "originalAmount": 100.00,
+          "sourceCurrency": "USD",
+          "targetCurrency": "MXN",
+          "buyAmountAndCurrency": {
+            "amount": 100.00,
+            "currency": "USD"
+          },
+          "sellAmountAndCurrency": {
+            "amount": 1765.00,
+            "currency": "MXN"
+          },
+          "resultingAmount": 1765.00,
+          "createdAt": "2025-03-24T12:55:43Z",
+          "updatedAt": "2025-03-24T12:55:43Z"
+        }
+      },
+      "InitiateCurrencyExchangeTransactionRequest": {
+        "value": {
+          "originalAmount": 100.00,
+          "sourceCurrency": "USD",
+          "targetCurrency": "MXN"
+        }
+      },
+      "InitiateCurrencyExchangeTransactionResponse": {
+        "value": {
+          "id": "94c0c588-c547-4ae5-b1c0-dba6c53d407d",
+          "status": "INITIATED",
+          "originalAmount": 100.00,
+          "sourceCurrency": "USD",
+          "targetCurrency": "MXN",
+          "createdAt": "2025-03-24T12:55:43Z",
+          "updatedAt": "2025-03-24T12:55:43Z"
+        }
+      },
+      "UpdateCurrencyExchangeTransactionRequest": {
+        "value": {
+          "id": "94c0c588-c547-4ae5-b1c0-dba6c53d407d",
+          "originalAmount": 100.00,
+          "sourceCurrency": "USD",
+          "targetCurrency": "MXN"
+        }
+      },
+      "UpdateCurrencyExchangeTransactionResponse": {
+        "value": {
+          "id": "94c0c588-c547-4ae5-b1c0-dba6c53d407d",
+          "status": "INITIATED",
+          "originalAmount": 100.00,
+          "sourceCurrency": "USD",
+          "targetCurrency": "MXN",
+          "createdAt": "2025-03-24T12:55:43Z",
+          "updatedAt": "2025-03-25T12:55:43Z"
+        }
+      },
+      "ExecuteCurrencyExchangeTransactionRequest": {
+        "value": {
+          "id": "94c0c588-c547-4ae5-b1c0-dba6c53d407d"
+        }
+      },
+      "ExecuteCurrencyExchangeTransactionResponse": {
+        "value": {
+          "id": "94c0c588-c547-4ae5-b1c0-dba6c53d407d",
+          "status": "EXECUTE",
+          "originalAmount": 100.00,
+          "sourceCurrency": "USD",
+          "targetCurrency": "MXN",
+          "buyAmountAndCurrency": {
+            "amount": 100.00,
+            "currency": "USD"
+          },
+          "sellAmountAndCurrency": {
+            "amount": 1765.00,
+            "currency": "MXN"
+          },
+          "resultingAmount": 1765.00,
+          "createdAt": "2025-03-24T12:55:43Z",
+          "updatedAt": "2025-03-25T12:55:43Z"
+        }
+      },
+      "ControlCurrencyExchangeTransactionRequest": {
+        "value": {
+          "id": "94c0c588-c547-4ae5-b1c0-dba6c53d407d",
+          "status": "CANCELLED"
+        }
+      },
+      "ControlCurrencyExchangeTransactionResponse": {
+        "value": {
+          "id": "94c0c588-c547-4ae5-b1c0-dba6c53d407d",
+          "status": "CANCELLED",
+          "originalAmount": 100.00,
+          "sourceCurrency": "USD",
+          "targetCurrency": "MXN",
+          "buyAmountAndCurrency": {
+            "amount": 0.00,
+            "currency": "USD"
+          },
+          "sellAmountAndCurrency": {
+            "amount": 0.00,
+            "currency": "MXN"
+          },
+          "resultingAmount": 0.00,
+          "createdAt": "2025-03-24T12:55:43Z",
+          "updatedAt": "2025-03-25T12:55:43Z"
+        }
+      },
+      "BadRequest": {
+        "value": {
+          "statusCode": "400",
+          "status": "ClientError",
+          "message": "The server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing)."
+        }
+      },
+      "Unauthorized": {
+        "value": {
+          "statusCode": "401",
+          "status": "ClientError",
+          "message": "The request has not been applied because it lacks valid authentication  credentials for the target resource"
+        }
+      },
+      "Forbidden": {
+        "value": {
+          "statusCode": "403",
+          "status": "ClientError",
+          "message": "The server understood the request but refuses to authorize it."
+        }
+      },
+      "NotFound": {
+        "value": {
+          "statusCode": "404",
+          "status": "ClientError",
+          "message": "The origin server did not find a current representation for the target resource or is not willing to disclose that one exists."
+        }
+      },
+      "Conflict": {
+        "value": {
+          "statusCode": "409",
+          "status": "ClientError",
+          "message": "This response is sent when a request conflicts with the current state of the server. In WebDAV remote web authoring, 409 responses are errors sent to the client so that a user might be able to resolve a conflict and resubmit the request."
+        }
+      },
+      "FailedDependency": {
+        "value": {
+          "statusCode": "424",
+          "status": "ClientError",
+          "message": "The request failed due to failure of a previous request."
+        }
+      },
+      "InternalServerError": {
+        "value": {
+          "statusCode": "500",
+          "status": "ServerError",
+          "message": "The server encountered an unexpected condition that prevented it from fulfilling the request."
+        }
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "string",
+            "description": "Código de estado del error en la solicitud."
+          },
+          "status": {
+            "type": "string",
+            "description": "Estado de error en la solicitud."
+          },
+          "message": {
+            "type": "string",
+            "description": "Mensaje de error en la solicitud."
+          }
+        },
+        "required": [
+          "statusCode",
+          "status",
+          "message"
+        ]
+      },
+      "TransactionStatus": {
+        "type": "string",
+        "description": "Estado actual de la transacción. Posibles valores: INITIATED, EXECUTED, CANCELLED, FAILED, etc.",
+        "enum": [
+          "INITIATED",
+          "PENDING",
+          "EXECUTED",
+          "CANCELLED",
+          "FAILED"
+        ]
+      },
+      "AmountAndCurrency": {
+        "type": "object",
+        "required": [
+          "amount",
+          "currency"
+        ],
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Monto de la transación."
+          },
+          "currency": {
+            "type": "string",
+            "description": "Código de la moneda en ISO 4217 (ej. MXN)."
+          }
+        }
+      },
+      "RetrieveCurrencyExchangeTransactionResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "originalAmount",
+          "sourceCurrency",
+          "targetCurrency",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único de la transacción. Puede ser un UUID generado por el sistema."
+          },
+          "status": {
+            "$ref": "#/components/schemas/TransactionStatus"
+          },
+          "originalAmount": {
+            "type": "number",
+            "description": "Monto original entregado por el cliente antes de aplicar la tasa de cambio."
+          },
+          "sourceCurrency": {
+            "type": "string",
+            "format": "double",
+            "description": "Código de la moneda de origen ISO 4217 (ej. MXN)."
+          },
+          "targetCurrency": {
+            "type": "string",
+            "format": "double",
+            "description": "Código de la moneda de destino ISO 4217 (ej. MXN)."
+          },
+          "buyAmountAndCurrency": {
+            "$ref": "#/components/schemas/AmountAndCurrency"
+          },
+          "sellAmountAndCurrency": {
+            "$ref": "#/components/schemas/AmountAndCurrency"
+          },
+          "resultingAmount": {
+            "type": "number",
+            "format": "double",
+            "description": "Resultado neto de la operación (después de aplicar tasas, comisiones, etc.)."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      },
+      "InitiateCurrencyExchangeTransactionRequest": {
+        "type": "object",
+        "required": [
+          "originalAmount",
+          "sourceCurrency",
+          "targetCurrency"
+        ],
+        "properties": {
+          "originalAmount": {
+            "type": "number",
+            "description": "Monto original entregado por el cliente antes de aplicar la tasa de cambio."
+          },
+          "sourceCurrency": {
+            "type": "string",
+            "format": "double",
+            "description": "Código de la moneda de origen ISO 4217 (ej. MXN)."
+          },
+          "targetCurrency": {
+            "type": "string",
+            "format": "double",
+            "description": "Código de la moneda de destino ISO 4217 (ej. MXN)."
+          }
+        }
+      },
+      "InitiateCurrencyExchangeTransactionResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "originalAmount",
+          "sourceCurrency",
+          "targetCurrency",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único de la transacción. Puede ser un UUID generado por el sistema."
+          },
+          "status": {
+            "$ref": "#/components/schemas/TransactionStatus"
+          },
+          "originalAmount": {
+            "type": "number",
+            "description": "Monto original entregado por el cliente antes de aplicar la tasa de cambio."
+          },
+          "sourceCurrency": {
+            "type": "string",
+            "format": "double",
+            "description": "Código de la moneda de origen ISO 4217 (ej. MXN)."
+          },
+          "targetCurrency": {
+            "type": "string",
+            "format": "double",
+            "description": "Código de la moneda de destino ISO 4217 (ej. MXN)."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      },
+      "UpdateCurrencyExchangeTransactionRequest": {
+        "type": "object",
+        "required": [
+          "id",
+          "originalAmount",
+          "sourceCurrency",
+          "targetCurrency"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único de la transacción. Puede ser un UUID generado por el sistema."
+          },
+          "originalAmount": {
+            "type": "number",
+            "description": "Monto original entregado por el cliente antes de aplicar la tasa de cambio."
+          },
+          "sourceCurrency": {
+            "type": "string",
+            "format": "double",
+            "description": "Código de la moneda de origen ISO 4217 (ej. MXN)."
+          },
+          "targetCurrency": {
+            "type": "string",
+            "format": "double",
+            "description": "Código de la moneda de destino ISO 4217 (ej. MXN)."
+          }
+        }
+      },
+      "UpdateCurrencyExchangeTransactionResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "originalAmount",
+          "sourceCurrency",
+          "targetCurrency",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único de la transacción. Puede ser un UUID generado por el sistema."
+          },
+          "status": {
+            "$ref": "#/components/schemas/TransactionStatus"
+          },
+          "originalAmount": {
+            "type": "number",
+            "description": "Monto original entregado por el cliente antes de aplicar la tasa de cambio."
+          },
+          "sourceCurrency": {
+            "type": "string",
+            "description": "Código de la moneda de origen ISO 4217 (ej. MXN)."
+          },
+          "targetCurrency": {
+            "type": "string",
+            "description": "Código de la moneda de destino ISO 4217 (ej. MXN)."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      },
+      "ControlCurrencyExchangeTransactionRequest": {
+        "type": "object",
+        "required": [
+          "id",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único de la transacción. Puede ser un UUID generado por el sistema."
+          },
+          "status": {
+            "$ref": "#/components/schemas/TransactionStatus"
+          }
+        }
+      },
+      "ControlCurrencyExchangeTransactionResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "originalAmount",
+          "sourceCurrency",
+          "targetCurrency",
+          "buyAmountAndCurrency",
+          "sellAmountAndCurrency",
+          "resultingAmount",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TransactionStatus"
+          },
+          "originalAmount": {
+            "type": "number",
+            "description": "Monto original entregado por el cliente antes de aplicar la tasa de cambio."
+          },
+          "sourceCurrency": {
+            "type": "string",
+            "description": "Código de la moneda de origen ISO 4217 (ej. MXN)."
+          },
+          "targetCurrency": {
+            "type": "string",
+            "description": "Código de la moneda de destino ISO 4217 (ej. MXN)."
+          },
+          "buyAmountAndCurrency": {
+            "$ref": "#/components/schemas/AmountAndCurrency"
+          },
+          "sellAmountAndCurrency": {
+            "$ref": "#/components/schemas/AmountAndCurrency"
+          },
+          "resultingAmount": {
+            "type": "number",
+            "description": "Resultado neto de la operación (después de aplicar tasas, comisiones, etc.)."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      },
+      "ExecuteCurrencyExchangeTransactionRequest": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único de la transacción. Puede ser un UUID generado por el sistema."
+          }
+        }
+      },
+      "ExecuteCurrencyExchangeTransactionResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "originalAmount",
+          "sourceCurrency",
+          "targetCurrency",
+          "buyAmountAndCurrency",
+          "sellAmountAndCurrency",
+          "resultingAmount",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TransactionStatus"
+          },
+          "originalAmount": {
+            "type": "number",
+            "description": "Monto original entregado por el cliente antes de aplicar la tasa de cambio."
+          },
+          "sourceCurrency": {
+            "type": "string",
+            "description": "Código de la moneda de origen ISO 4217 (ej. MXN)."
+          },
+          "targetCurrency": {
+            "type": "string",
+            "description": "Código de la moneda de destino ISO 4217 (ej. MXN)."
+          },
+          "buyAmountAndCurrency": {
+            "$ref": "#/components/schemas/AmountAndCurrency"
+          },
+          "sellAmountAndCurrency": {
+            "$ref": "#/components/schemas/AmountAndCurrency"
+          },
+          "resultingAmount": {
+            "type": "number",
+            "description": "Resultado neto de la operación (después de aplicar tasas, comisiones, etc.)."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "requestBodies": {
+      "InitiateCurrencyExchangeTransactionRequest": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InitiateCurrencyExchangeTransactionRequest"
+            },
+            "examples": {
+              "InitiateCurrencyExchangeTransactionRequest": {
+                "$ref": "#/components/examples/InitiateCurrencyExchangeTransactionRequest"
+              }
+            }
+          }
+        }
+      },
+      "UpdateCurrencyExchangeTransactionRequest": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UpdateCurrencyExchangeTransactionRequest"
+            },
+            "examples": {
+              "UpdateCurrencyExchangeTransactionRequest": {
+                "$ref": "#/components/examples/UpdateCurrencyExchangeTransactionRequest"
+              }
+            }
+          }
+        }
+      },
+      "ControlCurrencyExchangeTransactionRequest": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ControlCurrencyExchangeTransactionRequest"
+            },
+            "examples": {
+              "ControlCurrencyExchangeTransactionRequest": {
+                "$ref": "#/components/examples/ControlCurrencyExchangeTransactionRequest"
+              }
+            }
+          }
+        }
+      },
+      "ExecuteCurrencyExchangeTransactionRequest": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ExecuteCurrencyExchangeTransactionRequest"
+            },
+            "examples": {
+              "ExecuteCurrencyExchangeTransactionRequest": {
+                "$ref": "#/components/examples/ExecuteCurrencyExchangeTransactionRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "RetrieveCurrencyExchangeTransactionResponse": {
+        "description": "Created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RetrieveCurrencyExchangeTransactionResponse"
+            },
+            "examples": {
+              "RetrieveCurrencyExchangeTransactionResponse": {
+                "$ref": "#/components/examples/RetrieveCurrencyExchangeTransactionResponse"
+              }
+            }
+          }
+        }
+      },
+      "InitiateCurrencyExchangeTransactionResponse": {
+        "description": "Ok",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InitiateCurrencyExchangeTransactionResponse"
+            },
+            "examples": {
+              "InitiateCurrencyExchangeTransactionResponse": {
+                "$ref": "#/components/examples/InitiateCurrencyExchangeTransactionResponse"
+              }
+            }
+          }
+        }
+      },
+      "UpdateCurrencyExchangeTransactionResponse": {
+        "description": "Ok",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UpdateCurrencyExchangeTransactionResponse"
+            },
+            "examples": {
+              "UpdateCurrencyExchangeTransactionResponse": {
+                "$ref": "#/components/examples/UpdateCurrencyExchangeTransactionResponse"
+              }
+            }
+          }
+        }
+      },
+      "ControlCurrencyExchangeTransactionResponse": {
+        "description": "Ok",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ControlCurrencyExchangeTransactionResponse"
+            },
+            "examples": {
+              "ControlCurrencyExchangeTransactionResponse": {
+                "$ref": "#/components/examples/ControlCurrencyExchangeTransactionResponse"
+              }
+            }
+          }
+        }
+      },
+      "ExecuteCurrencyExchangeTransactionResponse": {
+        "description": "Ok",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ExecuteCurrencyExchangeTransactionResponse"
+            },
+            "examples": {
+              "ExecuteCurrencyExchangeTransactionResponse": {
+                "$ref": "#/components/examples/ExecuteCurrencyExchangeTransactionResponse"
+              }
+            }
+          }
+        }
+      },
+      "NoContent": {
+        "description": "204 No Content"
+      },
+      "BadRequest": {
+        "description": "400 Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "BadRequest": {
+                "$ref": "#/components/examples/BadRequest"
+              }
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "401 Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "Unauthorized": {
+                "$ref": "#/components/examples/Unauthorized"
+              }
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "403 Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "Forbidden": {
+                "$ref": "#/components/examples/Forbidden"
+              }
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "404 Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "NotFound": {
+                "$ref": "#/components/examples/NotFound"
+              }
+            }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "409 Conflict",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "NotFound": {
+                "$ref": "#/components/examples/NotFound"
+              }
+            }
+          }
+        }
+      },
+      "FailedDependency": {
+        "description": "424 Failed Dependency",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "NotFound": {
+                "$ref": "#/components/examples/NotFound"
+              }
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "500 Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "InternalServerError": {
+                "$ref": "#/components/examples/InternalServerError"
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "transactionId": {
+        "name": "transactionId",
+        "description": "Identificador único de la transacción. Puede ser un UUID generado por el sistema.",
+        "in": "path",
+        "required": true,
+        "style": "simple",
+        "schema": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
