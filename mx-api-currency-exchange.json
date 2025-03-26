@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Currency Exchange",
+    "title": "Bank Currency Exchange",
     "description": "Currency Exchange es un servicio de mostrador (Over-The-Counter) donde se realiza el intercambio de divisas. Cada transacción puede usar tipos de cambio preferenciales y puede incluir comisiones por transacción. En algunos casos, los cheques de viajero pueden manejarse como una pseudo-divisa dentro de esta capacidad.",
     "contact": {
       "email": "cristian_gerar@hotmail.com"
