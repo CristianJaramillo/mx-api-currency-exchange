@@ -1,6 +1,6 @@
 # Bank Currency Exchange
 
-**Versión:** 1.0.0  
+**Versión:** 1.0.1  
 **Contacto:** cristian_gerar@hotmail.com
 
 `Currency Exchange` es un servicio de mostrador (Over-The-Counter) donde se realiza el intercambio de divisas. Cada transacción puede usar tipos de cambio preferenciales y puede incluir comisiones por transacción. En algunos casos, los cheques de viajero pueden manejarse como una pseudo-divisa dentro de esta capacidad.
