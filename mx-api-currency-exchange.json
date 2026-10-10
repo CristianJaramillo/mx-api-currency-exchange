@@ -6,7 +6,7 @@
     "contact": {
       "email": "cristian_gerar@hotmail.com"
     },
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "servers": [
     {
@@ -23,7 +23,7 @@
           "CurrencyExchange"
         ],
         "summary": "Cambia el estado de una transacción para indicar su cancelación. Esta operación es útil cuando el cliente decide no continuar con el intercambio o si se detectan condiciones que impiden su procesamiento. Garantiza que la transacción no avance a etapas de ejecución ni afecte los saldos operativos.",
-        "operationId": "ControleTransactionV1",
+        "operationId": "ControlTransactionV1",
         "requestBody": {
           "$ref": "#/components/requestBodies/ControlCurrencyExchangeTransactionRequest"
         },
